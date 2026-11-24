@@ -1,7 +1,7 @@
 FROM eclipse-temurin:25-jdk AS build
 WORKDIR /app
 COPY . .
-RUN chmod +x reservation/mvnw && cd reservation && ./mvnw clean package -DskipTests
+RUN chmod +x reservation/mvnw && cd reservation && ./mvnw clean package -Dmaven.test.skip=true
 
 FROM eclipse-temurin:25-jre
 WORKDIR /app
