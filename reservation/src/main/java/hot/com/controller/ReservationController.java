@@ -1,8 +1,6 @@
-
 package hot.com.controller;
 
 import hot.com.model.Reservation;
-import hot.com.service.EmailService;
 import hot.com.service.ReservationService;
 
 import jakarta.validation.Valid;
@@ -23,14 +21,10 @@ import java.util.Map;
 public class ReservationController {
 
     private final ReservationService reservationService;
-    private final EmailService emailService;
 
     public ReservationController(
-            ReservationService reservationService,
-            EmailService emailService) {
-
+            ReservationService reservationService) {
         this.reservationService = reservationService;
-        this.emailService = emailService;
     }
 
     @PostMapping
@@ -54,24 +48,11 @@ public class ReservationController {
         Reservation savedReservation =
                 reservationService.createReservation(reservation);
 
-        // Send emails
-        boolean emailSent = true;
-
-        try {
-            emailService.sendReservationEmails(savedReservation);
-        } catch (Exception e) {
-            emailSent = false;
-            System.err.println(
-                    "Email sending failed: " + e.getMessage()
-            );
-        }
-
         return ResponseEntity.ok(
                 Map.of(
                         "message", "Reservation saved successfully",
                         "reservationId", savedReservation.getId(),
-                        "bookingStatus", savedReservation.getBookingStatus(),
-                        "emailSent", emailSent
+                        "bookingStatus", savedReservation.getBookingStatus()
                 )
         );
     }
